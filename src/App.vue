@@ -1,7 +1,6 @@
 
 <script setup lang="ts">
   import { NonExistent } from './doesNotExist'; // build will fail
-  const test: number = "this should fail"; // TS2322
 
 </script>
 
