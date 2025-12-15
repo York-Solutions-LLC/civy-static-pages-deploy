@@ -46,22 +46,35 @@ jobs:
             exit $TS_EXIT
           fi
 
-      - name: Run tests
+      - name: Run Vitest Tests
         run: |
           set -o pipefail
-          TEST_OUTPUT=$(npm test -- --reporter verbose 2>&1) || TEST_EXIT=$?
+          # Run tests and capture output and exit code
+          TEST_OUTPUT=$(npm test 2>&1) || TEST_EXIT=$?
+          
           echo "### Vitest Test Results" >> $GITHUB_STEP_SUMMARY
+          
           if [ -z "$TEST_EXIT" ]; then
+            # All tests passed
             echo "**Status:** ✅ Passed" >> $GITHUB_STEP_SUMMARY
-            CLEAN_OUTPUT=$(echo "$TEST_OUTPUT" | sed 's/\x1b\[[0-9;]*m//g')
-            echo "```\n$CLEAN_OUTPUT\n```" >> $GITHUB_STEP_SUMMARY
           else
+            # Some tests failed
             echo "**Status:** ❌ Failed" >> $GITHUB_STEP_SUMMARY
+            # Strip ANSI colors
             CLEAN_OUTPUT=$(echo "$TEST_OUTPUT" | sed 's/\x1b\[[0-9;]*m//g')
-            echo "```\n$CLEAN_OUTPUT\n```" >> $GITHUB_STEP_SUMMARY
+            # Extract only failing tests (lines containing 'FAILED' + a few context lines)
+            FAILURES=$(echo "$CLEAN_OUTPUT" | grep -A 5 'FAILED')
+            if [ -n "$FAILURES" ]; then
+              echo "```\n$FAILURES\n```" >> $GITHUB_STEP_SUMMARY
+            else
+              # fallback if grep finds nothing
+              echo "```\n$CLEAN_OUTPUT\n```" >> $GITHUB_STEP_SUMMARY
+            fi
+            # Exit with failure code
             exit $TEST_EXIT
           fi
-          
+
+
       - name: Build
         run: |
           set -o pipefail
