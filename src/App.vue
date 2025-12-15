@@ -1,12 +1,11 @@
 
 <script setup lang="ts">
-  import { NonExistent } from './doesNotExist'; // build will fail
-
 </script>
 
 <template>
   <div class="hello">
     <h1>Hi!</h1>
+    <div>{{ count </div> <!-- missing closing braces -->
   </div>
 </template>
 
