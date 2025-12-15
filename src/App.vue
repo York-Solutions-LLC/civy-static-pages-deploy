@@ -1,10 +1,13 @@
+
 <script setup lang="ts">
-  
+  import { NonExistent } from './doesNotExist'; // build will fail
+  const test: number = "this should fail"; // TS2322
+
 </script>
 
 <template>
   <div class="hello">
-    <h1>Hello!</h1>
+    <h1>Hi!</h1>
   </div>
 </template>
 
