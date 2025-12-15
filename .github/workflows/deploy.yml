@@ -60,10 +60,13 @@ jobs:
           else
             # Some tests failed
             echo "**Status:** ❌ Failed" >> $GITHUB_STEP_SUMMARY
+
             # Strip ANSI colors
             CLEAN_OUTPUT=$(echo "$TEST_OUTPUT" | sed 's/\x1b\[[0-9;]*m//g')
+
             # Extract only failing tests (lines containing 'FAILED' + a few context lines)
-            FAILURES=$(echo "$CLEAN_OUTPUT" | grep -A 5 'FAILED')
+            FAILURES=$(echo "$CLEAN_OUTPUT" | grep -A 2 '✕')
+            
             if [ -n "$FAILURES" ]; then
               echo "```\n$FAILURES\n```" >> $GITHUB_STEP_SUMMARY
             else
