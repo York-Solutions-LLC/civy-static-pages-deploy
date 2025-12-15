@@ -57,23 +57,31 @@ jobs:
           if [ -z "$TEST_EXIT" ]; then
             # All tests passed
             echo "**Status:** ✅ Passed" >> $GITHUB_STEP_SUMMARY
+            # Strip ANSI colors and show summary
+            CLEAN_OUTPUT=$(echo "$TEST_OUTPUT" | sed 's/\x1b\[[0-9;]*m//g')
+            SUMMARY=$(echo "$CLEAN_OUTPUT" | grep -E "Test Files|Tests|Duration" | head -n 10)
+            if [ -n "$SUMMARY" ]; then
+              echo '```' >> $GITHUB_STEP_SUMMARY
+              echo "$SUMMARY" >> $GITHUB_STEP_SUMMARY
+              echo '```' >> $GITHUB_STEP_SUMMARY
+            fi
           else
             # Some tests failed
             echo "**Status:** ❌ Failed" >> $GITHUB_STEP_SUMMARY
 
-            # Strip ANSI colors
-            CLEAN_OUTPUT=$(echo "$TEST_OUTPUT" | sed 's/\x1b\[[0-9;]*m//g')
-
-            # Extract only failing tests (lines containing 'FAILED' + a few context lines)
-            FAILURES=$(echo "$CLEAN_OUTPUT" | grep -A 2 '✕')
+            # Extract failure section (from "FAIL" to test summary)
+            FAILURES=$(echo "$CLEAN_OUTPUT" | sed -n '/FAIL/,/Test Files/p')
             
             if [ -n "$FAILURES" ]; then
-              echo "```\n$FAILURES\n```" >> $GITHUB_STEP_SUMMARY
+              echo '```' >> $GITHUB_STEP_SUMMARY
+              echo "$FAILURES" >> $GITHUB_STEP_SUMMARY
+              echo '```' >> $GITHUB_STEP_SUMMARY
             else
-              # fallback if grep finds nothing
-              echo "```\n$CLEAN_OUTPUT\n```" >> $GITHUB_STEP_SUMMARY
+              # fallback: show last 30 lines
+              echo '```' >> $GITHUB_STEP_SUMMARY
+              echo "$CLEAN_OUTPUT" | tail -n 30 >> $GITHUB_STEP_SUMMARY
+              echo '```' >> $GITHUB_STEP_SUMMARY
             fi
-            # Exit with failure code
             exit $TEST_EXIT
           fi
 
