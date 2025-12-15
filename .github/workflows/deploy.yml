@@ -25,14 +25,24 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'npm'
+          node-version: "20"
+          cache: "npm"
 
       - name: Install dependencies
         run: npm ci
 
       - name: Type check
-        run: npm run type-check
+        run: |
+          set -o pipefail
+          TS_OUTPUT=$(npm run type-check 2>&1) || TS_EXIT=$?
+          echo "### TypeScript Type Check" >> $GITHUB_STEP_SUMMARY
+          if [ -z "$TS_EXIT" ]; then
+            echo "**Status:** ✅ Passed" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "**Status:** ❌ Failed" >> $GITHUB_STEP_SUMMARY
+            echo "```\n$TS_OUTPUT\n```" >> $GITHUB_STEP_SUMMARY
+            exit $TS_EXIT
+          fi
 
       - name: Run tests
         run: npm test
@@ -46,7 +56,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './dist'
+          path: "./dist"
 
   deploy:
     environment:
