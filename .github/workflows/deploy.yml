@@ -73,7 +73,8 @@ jobs:
             CLEAN_OUTPUT=$(echo "$TEST_OUTPUT" | sed 's/\x1b\[[0-9;]*m//g')
 
             # Extract failure section (from "FAIL" to test summary)
-            FAILURES=$(echo "$CLEAN_OUTPUT" | sed -n '/FAIL/,/Test Files/p')
+            FAILURES=$(echo "$CLEAN_OUTPUT" | grep -E '✕|failed' -A 3 | head -n 20)
+
             
             if [ -n "$FAILURES" ]; then
               echo '```' >> $GITHUB_STEP_SUMMARY

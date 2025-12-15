@@ -5,7 +5,6 @@
 <template>
   <div class="hello">
     <h1>Hi!</h1>
-    <div>{{ count </div> <!-- missing closing braces -->
   </div>
 </template>
 
