@@ -40,15 +40,44 @@ jobs:
             echo "**Status:** ✅ Passed" >> $GITHUB_STEP_SUMMARY
           else
             echo "**Status:** ❌ Failed" >> $GITHUB_STEP_SUMMARY
-            echo "```\n$TS_OUTPUT\n```" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            echo "$TS_OUTPUT" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
             exit $TS_EXIT
           fi
 
       - name: Run tests
-        run: npm test
+        run: |
+          set -o pipefail
+          TEST_OUTPUT=$(npm test 2>&1) || TEST_EXIT=$?
+          echo "### Tests" >> $GITHUB_STEP_SUMMARY
+          if [ -z "$TEST_EXIT" ]; then
+            echo "**Status:** ✅ Passed" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            echo "$TEST_OUTPUT" | tail -n 15 >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+          else
+            echo "**Status:** ❌ Failed" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            echo "$TEST_OUTPUT" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            exit $TEST_EXIT
+          fi
 
       - name: Build
-        run: npm run build
+        run: |
+          set -o pipefail
+          BUILD_OUTPUT=$(npm run build 2>&1) || BUILD_EXIT=$?
+          echo "### Build" >> $GITHUB_STEP_SUMMARY
+          if [ -z "$BUILD_EXIT" ]; then
+            echo "**Status:** ✅ Passed" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "**Status:** ❌ Failed" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            echo "$BUILD_OUTPUT" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            exit $BUILD_EXIT
+          fi
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -69,3 +98,14 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+      - name: Deployment summary
+        if: always()
+        run: |
+          echo "### Deployment" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ steps.deployment.outcome }}" = "success" ]; then
+            echo "**Status:** ✅ Deployed" >> $GITHUB_STEP_SUMMARY
+            echo "**URL:** ${{ steps.deployment.outputs.page_url }}" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "**Status:** ❌ Failed" >> $GITHUB_STEP_SUMMARY
+          fi
