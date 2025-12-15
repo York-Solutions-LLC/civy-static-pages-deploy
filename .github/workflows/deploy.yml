@@ -69,6 +69,9 @@ jobs:
             # Some tests failed
             echo "**Status:** ❌ Failed" >> $GITHUB_STEP_SUMMARY
 
+            # Strip ANSI colors
+            CLEAN_OUTPUT=$(echo "$TEST_OUTPUT" | sed 's/\x1b\[[0-9;]*m//g')
+
             # Extract failure section (from "FAIL" to test summary)
             FAILURES=$(echo "$CLEAN_OUTPUT" | sed -n '/FAIL/,/Test Files/p')
             
