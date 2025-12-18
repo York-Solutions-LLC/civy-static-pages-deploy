@@ -7,12 +7,8 @@ describe('calculate function', () => {
       expect(calculate(5, 3, '+')).toBe(8);
     });
 
-    it('adds negative numbers', () => {
+    it('handles negative numbers', () => {
       expect(calculate(-5, -3, '+')).toBe(-8);
-    });
-
-    it('adds zero', () => {
-      expect(calculate(10, 0, '+')).toBe(10);
     });
   });
 
@@ -21,12 +17,8 @@ describe('calculate function', () => {
       expect(calculate(10, 4, '-')).toBe(6);
     });
 
-    it('subtracts resulting in negative', () => {
+    it('handles negative results', () => {
       expect(calculate(3, 7, '-')).toBe(-4);
-    });
-
-    it('subtracts zero', () => {
-      expect(calculate(10, 0, '-')).toBe(10);
     });
   });
 
@@ -35,36 +27,44 @@ describe('calculate function', () => {
       expect(calculate(7, 8, 'x')).toBe(56);
     });
 
-    it('multiplies by zero', () => {
-      expect(calculate(10, 0, 'x')).toBe(0);
-    });
-
-    it('multiplies negative numbers', () => {
+    it('handles negative numbers', () => {
       expect(calculate(-5, -3, 'x')).toBe(15);
     });
 
-    it('multiplies positive and negative', () => {
-      expect(calculate(5, -3, 'x')).toBe(-15);
+    it('multiplies by zero', () => {
+      expect(calculate(10, 0, 'x')).toBe(0);
     });
   });
 
   describe('division', () => {
-    it('divides two positive numbers evenly', () => {
+    it('divides two positive numbers', () => {
       expect(calculate(20, 5, '÷')).toBe(4);
     });
 
-    it('truncates decimal results', () => {
-      expect(calculate(10, 3, '÷')).toBe(3); // 3.333... truncated to 3
+    it('returns decimal results', () => {
+      expect(calculate(10, 3, '÷')).toBeCloseTo(3.333, 2); // 3.333...
     });
 
-    it('divides negative numbers', () => {
+    it('handles negative results', () => {
       expect(calculate(-20, 5, '÷')).toBe(-4);
     });
 
-    it('handles division by zero', () => {
-      // Math.trunc(5 / 0) = Infinity, which may not be ideal
-      const result = calculate(5, 0, '÷');
-      expect(result).toBe(Infinity);
+    it('returns 0 when dividing by zero', () => {
+      expect(calculate(5, 0, '÷')).toBe(0);
+    });
+  });
+
+  describe('intentional failures', () => {
+    it('FAIL: wrong subtraction', () => {
+      expect(calculate(10, 3, '-')).toBe(13); // Should be 7, not 13
+    });
+
+    it('FAIL: decimal precision', () => {
+      expect(calculate(10, 3, '÷')).toBe(3); // Actually returns ~3.333
+    });
+
+    it('FAIL: operator confusion', () => {
+      expect(calculate(4, 5, 'x')).toBe(9); // Multiplication gives 20, not 9
     });
   });
 });

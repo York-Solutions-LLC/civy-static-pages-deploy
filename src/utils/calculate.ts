@@ -13,7 +13,8 @@ export const calculate = (
     case "x":
       return left * right;
     case "÷":
-      return Math.trunc(left / right);
+      if (right === 0) return 0;
+      return left / right;
     default: {
       // Exhaustiveness check - should never reach here
       const _exhaustive: never = operator;
