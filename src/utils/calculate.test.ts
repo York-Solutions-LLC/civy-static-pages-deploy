@@ -54,17 +54,18 @@ describe('calculate function', () => {
     });
   });
 
-  describe('intentional failures', () => {
-    it('FAIL: wrong subtraction', () => {
-      expect(calculate(10, 3, '-')).toBe(13); // Should be 7, not 13
-    });
+//   describe('intentional failures', () => {
+//     it('FAIL: wrong subtraction', () => {
+//       expect(calculate(10, 3, '-')).toBe(13); // Should be 7, not 13
+//     });
 
-    it('FAIL: decimal precision', () => {
-      expect(calculate(10, 3, '÷')).toBe(3); // Actually returns ~3.333
-    });
+//     it('FAIL: decimal precision', () => {
+//       expect(calculate(10, 3, '÷')).toBe(3); // Actually returns ~3.333
+//     });
 
-    it('FAIL: operator confusion', () => {
-      expect(calculate(4, 5, 'x')).toBe(9); // Multiplication gives 20, not 9
-    });
-  });
+//     it('FAIL: operator confusion', () => {
+//       expect(calculate(4, 5, 'x')).toBe(9); // Multiplication gives 20, not 9
+//     });
+//   });
+// });
 });
