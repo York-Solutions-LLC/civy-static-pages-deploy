@@ -72,18 +72,17 @@ jobs:
             # Strip ANSI colors
             CLEAN_OUTPUT=$(echo "$TEST_OUTPUT" | sed 's/\x1b\[[0-9;]*m//g')
 
-            # Extract failure section (from "FAIL" to test summary)
-            FAILURES=$(echo "$CLEAN_OUTPUT" | grep -E '✕|failed' -A 3 | head -n 20)
+            # Extract detailed failure section - from "Failed Tests" to end of failures
+            FAILURES=$(echo "$CLEAN_OUTPUT" | sed -n '/Failed Tests/,/Test Files.*failed/p')
 
-            
             if [ -n "$FAILURES" ]; then
               echo '```' >> $GITHUB_STEP_SUMMARY
               echo "$FAILURES" >> $GITHUB_STEP_SUMMARY
               echo '```' >> $GITHUB_STEP_SUMMARY
             else
-              # fallback: show last 30 lines
+              # fallback: show last 50 lines to capture failures
               echo '```' >> $GITHUB_STEP_SUMMARY
-              echo "$CLEAN_OUTPUT" | tail -n 30 >> $GITHUB_STEP_SUMMARY
+              echo "$CLEAN_OUTPUT" | tail -n 50 >> $GITHUB_STEP_SUMMARY
               echo '```' >> $GITHUB_STEP_SUMMARY
             fi
             exit $TEST_EXIT
