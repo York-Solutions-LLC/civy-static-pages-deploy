@@ -14,12 +14,9 @@ const handleClick = () => {
 </script>
 
 <template>
-    <button
-        :class="['calc-button', props.variant]"
-        @click="handleClick"
-    >
-        {{ props.value }}
-    </button>
+  <button :class="['calc-button', props.variant]" @click="handleClick">
+    {{ props.value }}
+  </button>
 </template>
 
 <style scoped>
@@ -32,7 +29,7 @@ const handleClick = () => {
   cursor: pointer;
   transition: all 0.2s ease;
   font-weight: 500;
-  
+
   /* Remove default button styling */
   background: none;
   outline: none;
