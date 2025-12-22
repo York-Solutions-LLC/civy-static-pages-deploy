@@ -1,5 +1,5 @@
 # civy-static-pages-deploy
-![Tests](https://github.com/York-Solutions-LLC/civy-static-pages-deploy/actions/workflows/deploy.yml/badge.svg)
+[![Deploy to GitHub Pages](https://github.com/York-Solutions-LLC/civy-static-pages-deploy/actions/workflows/deploy.yml/badge.svg)](https://github.com/York-Solutions-LLC/civy-static-pages-deploy/actions/workflows/deploy.yml)
 
 A simple Vue 3 + TypeScript application with automated testing and deployment to GitHub Pages.
 
