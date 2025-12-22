@@ -14,6 +14,7 @@ const handleClick = () => {
 </script>
 
 <template>
+  <h1>test</h1>
   <button :class="['calc-button', props.variant]" @click="handleClick">
     {{ props.value }}
   </button>
