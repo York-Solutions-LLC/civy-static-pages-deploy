@@ -1,8 +1,28 @@
 # civy-static-pages-deploy
+![Tests](https://github.com/york-solutions-llc/civy-static-pages-deploy/actions/workflows/tests.yml/badge.svg)
 
 A simple Vue 3 + TypeScript application with automated testing and deployment to GitHub Pages.
 
+## Deployment
+
+This project is automatically built and deployed to GitHub Pages via GitHub Actions on merge to `main`.
+
 **Live Site:** https://york-solutions-llc.github.io/civy-static-pages-deploy/
+
+## Tech Stack
+
+- Vue 3
+- TypeScript
+- Vite
+- Vitest
+- GitHub Actions
+- GitHub Pages
+
+
+## Requirements
+
+- Node.js 18+
+- npm
 
 ## Commands
 
@@ -10,7 +30,7 @@ A simple Vue 3 + TypeScript application with automated testing and deployment to
 npm install          # Install dependencies
 npm run dev          # Start development server
 npm run build        # Build for production
-npm test             # Run unit tests
+npm test             # Run vitest unit tests
 npm run type-check   # Check TypeScript types
 ```
 
