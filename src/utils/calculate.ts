@@ -18,7 +18,7 @@ export const calculate = (
     default: {
       // Exhaustiveness check - should never reach here
       const _exhaustive: never = operator;
-      throw new Error(`Unhandled operator: ${_exhaustive}`);
+      throw new Error(`Unhandled operator: ${String(_exhaustive)}`);
     }
   }
 };
