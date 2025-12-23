@@ -28,9 +28,7 @@ const buttonLayout = [
     { value: "3", variant: "number" },
     { value: "=", variant: "equals" },
   ],
-  [
-    { value: "0", variant: "number" },
-  ],
+  [{ value: "0", variant: "number" }],
 ] as const;
 
 const display = ref("0");
@@ -38,12 +36,10 @@ const previousValue = ref<string | null>(null);
 const currentOperator = ref<Operator | null>(null);
 const waitingForNewValue = ref(false);
 
-const isNumber = (value: string) =>
-  /^\d$/.test(value);
+const isNumber = (value: string) => /^\d$/.test(value);
 
 const isOperator = (value: string): value is Operator =>
   value === "+" || value === "-" || value === "x" || value === "÷";
-
 
 const handleNumber = (digit: string) => {
   if (waitingForNewValue.value) {
@@ -52,10 +48,7 @@ const handleNumber = (digit: string) => {
     return;
   }
 
-  display.value =
-    display.value === "0"
-      ? digit
-      : display.value + digit;
+  display.value = display.value === "0" ? digit : display.value + digit;
 };
 
 const handleOperator = (nextOperator: Operator) => {
@@ -109,7 +102,6 @@ const handleEquals = () => {
   waitingForNewValue.value = true;
 };
 
-
 // Handler for button clicks
 const handleButtonClick = (value: string) => {
   if (isNumber(value)) handleNumber(value);
@@ -118,7 +110,6 @@ const handleButtonClick = (value: string) => {
   else if (value === "=") handleEquals();
   else if (value === "←") handleBackspace();
 };
-
 </script>
 
 <template>
@@ -129,9 +120,18 @@ const handleButtonClick = (value: string) => {
     <div class="display">{{ display }}</div>
 
     <div class="button-grid">
-      <div v-for="(row, rowIndex) in buttonLayout" :key="rowIndex" class="button-row">
-        <CalcButton v-for="(button, colIndex) in row" :key="`${rowIndex}-${colIndex}`" :value="button.value"
-          :variant="button.variant" @click="handleButtonClick" />
+      <div
+        v-for="(row, rowIndex) in buttonLayout"
+        :key="rowIndex"
+        class="button-row"
+      >
+        <CalcButton
+          v-for="(button, colIndex) in row"
+          :key="`${rowIndex}-${colIndex}`"
+          :value="button.value"
+          :variant="button.variant"
+          @click="handleButtonClick"
+        />
       </div>
     </div>
   </div>

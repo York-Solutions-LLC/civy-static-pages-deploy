@@ -34,6 +34,12 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Prettier check
+        run: npm run format:check
+
+      - name: Lint
+        run: npm run lint
+
       - name: Type check
         run: |
           set -o pipefail
@@ -54,9 +60,9 @@ jobs:
           set -o pipefail
           # Run tests and capture output and exit code
           TEST_OUTPUT=$(npm test 2>&1) || TEST_EXIT=$?
-          
+
           echo "### Vitest Test Results" >> $GITHUB_STEP_SUMMARY
-          
+
           if [ -z "$TEST_EXIT" ]; then
             # All tests passed
             echo "**Status:** ✅ Passed" >> $GITHUB_STEP_SUMMARY
@@ -96,7 +102,6 @@ jobs:
             fi
             exit $TEST_EXIT
           fi
-
 
       - name: Build
         run: |
