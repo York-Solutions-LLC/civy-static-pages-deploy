@@ -1,4 +1,4 @@
 #!/usr/bin/env sh
 npm run type-check
-npm test -- --run
+npx vitest run
 npm run build
