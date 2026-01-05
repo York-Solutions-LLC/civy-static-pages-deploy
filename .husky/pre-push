@@ -12,6 +12,8 @@ npm run type-check
 echo "Running tests..."
 npx vitest run
 
-# 3️⃣ Build the project
+# 3️⃣ Build the project!
 echo "Building project..."
 npm run build
+
+echo "✓ Pre-push checks passed"
