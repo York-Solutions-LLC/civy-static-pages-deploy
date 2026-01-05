@@ -11,11 +11,7 @@ describe("calculate function", () => {
       expect(calculate(-5, -3, "+")).toBe(-8);
     });
   });
-  describe("prepush test", () => {
-    it("intentionally fails", () => {
-      expect(calculate(1, 1, "+")).toBe(3); // intentional fail
-    });
-  });
+
   describe("subtraction", () => {
     it("subtracts two positive numbers", () => {
       expect(calculate(10, 4, "-")).toBe(6);
