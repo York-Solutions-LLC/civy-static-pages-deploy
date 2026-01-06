@@ -118,6 +118,29 @@ jobs:
             exit $BUILD_EXIT
           fi
 
+      - name: Run E2E tests
+        run: |
+          set -o pipefail
+          CYPRESS_OUTPUT=$(npm run e2e 2>&1) || CYPRESS_EXIT=$?
+          echo "### Cypress E2E Tests" >> $GITHUB_STEP_SUMMARY
+          if [ -z "$CYPRESS_EXIT" ]; then
+            echo "**Status:** ✅ Passed" >> $GITHUB_STEP_SUMMARY
+            # Optionally extract the summary lines
+            SUMMARY=$(echo "$CYPRESS_OUTPUT" | grep -E "All specs passed|passing")
+            if [ -n "$SUMMARY" ]; then
+              echo '```' >> $GITHUB_STEP_SUMMARY
+              echo "$SUMMARY" >> $GITHUB_STEP_SUMMARY
+              echo '```' >> $GITHUB_STEP_SUMMARY
+            fi
+          else
+            echo "**Status:** ❌ Failed" >> $GITHUB_STEP_SUMMARY
+            # Show last 50 lines of Cypress output for debugging
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            echo "$CYPRESS_OUTPUT" | tail -n 50 >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            exit $CYPRESS_EXIT
+          fi
+
       - name: Setup Pages
         uses: actions/configure-pages@v4
 
