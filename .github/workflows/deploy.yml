@@ -117,6 +117,9 @@ jobs:
             echo '```' >> $GITHUB_STEP_SUMMARY
             exit $BUILD_EXIT
           fi
+        
+      - name: Run E2E tests
+        run: npm run e2e
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
